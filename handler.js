@@ -86,7 +86,7 @@ module.exports.newSlot = async (event, context) => {
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
       },
       body: JSON.stringify(
-        {data: body}
+        {data: data}
       )
     };
   } catch (err) {
