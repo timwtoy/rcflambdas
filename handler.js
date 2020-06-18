@@ -29,7 +29,11 @@ module.exports.getDays = async (event, context) => {
     ExpressionAttributeValues : {':requestedDay' : event.pathParameters.day}
   }
 
-  console.log(`Get days: Event: ${event}`)
+  console.log(`request source? ${event.headers.origin}`);
+  let allowOrigin = "http://localhost:4200";
+  if (event && event.headers && event.headers.origin && event.headers.origin === "http://www.rcfscheduling.com") {
+    allowOrigin = "http://www.rcfscheduling.com";
+  }
 
   try {
     const data = await documentClient.scan(params).promise();
@@ -37,7 +41,7 @@ module.exports.getDays = async (event, context) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Headers" : "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:4200",
+        "Access-Control-Allow-Origin": allowOrigin,
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
       },
       body: JSON.stringify(
@@ -73,8 +77,13 @@ module.exports.newSlot = async (event, context) => {
       lengthOfTime: body.lengthOfTime
     }
   };
-  console.log(`Event Params: ${event.body}`);
+
+  console.log(`request source? ${event.headers.origin}`);
   
+  let allowOrigin = "http://localhost:4200";
+  if (event && event.headers && event.headers.origin && event.headers.origin === "http://www.rcfscheduling.com") {
+    allowOrigin = "http://www.rcfscheduling.com";
+  }
 
   try {
     const data = await documentClient.put(params).promise();
@@ -82,11 +91,11 @@ module.exports.newSlot = async (event, context) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Headers" : "Content-Type",
-        "Access-Control-Allow-Origin": "http://localhost:4200",
+        "Access-Control-Allow-Origin": allowOrigin,
         "Access-Control-Allow-Methods": "OPTIONS,POST,GET"
       },
       body: JSON.stringify(
-        {data: data}
+        {data: data.Items}
       )
     };
   } catch (err) {
