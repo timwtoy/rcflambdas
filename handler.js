@@ -74,11 +74,11 @@ module.exports.newSlot = async (event, context) => {
       id: body.id,
       currentDay: body.currentDay,
       beginningTime: body.beginningTime,
-      lengthOfTime: body.lengthOfTime
+      lengthOfTime: body.lengthOfTime,
+      name: body.name,
+      email: body.email
     }
   };
-
-  console.log(`request source? ${event.headers.origin}`);
   
   let allowOrigin = "http://localhost:4200";
   if (event && event.headers && event.headers.origin && event.headers.origin === "http://www.rcfscheduling.com") {
